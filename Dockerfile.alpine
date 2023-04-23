@@ -9,7 +9,7 @@ RUN apk add --no-cache git linux-headers libbsd-dev g++ clang cmake make bison \
   boost-thread libevent-dev elfutils-dev lz4-dev xz-dev openssl-dev libunwind-dev \
   fmt-dev fuse-dev glog-dev double-conversion-dev zstd zstd-dev libdwarf \
   libdwarf-dev fmt fmt-dev snappy snappy-dev libaio \
-  libaio-dev libsodium libsodium-dev bash xz
+  libaio-dev libsodium libsodium-dev bash xz patchelf
 
 # Clone
 # RUN mkdir -p dwarfs
@@ -28,7 +28,7 @@ RUN cmake .. -DWITH_TESTS=0 -DWITH_MUSL=1
 RUN make -j$(nproc)
 
 # Package
-RUN ./docker/patch_libs.sh "$(pwd)/dwarfs2" "$(pwd)/mkdwarfs" "$(pwd)/dwarfsextract"
+RUN ../docker/patch_libs.sh "$(pwd)/dwarfs2" "$(pwd)/mkdwarfs" "$(pwd)/dwarfsextract"
 RUN tar -cf dist.tar dist
 RUN xz -z3 dist.tar
 RUN mv dist.tar.xz ..
