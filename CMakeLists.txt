@@ -40,7 +40,7 @@ option(PREFER_SYSTEM_GTEST "use system gtest if available" OFF)
 option(STATIC_BUILD_DO_NOT_USE "try static build (experimental)" OFF)
 
 if (WITH_MUSL)
-  add_compile_definitions("-DMUSL")
+  add_compile_definitions("MUSL")
 endif()
 
 set(default_build_type "Release")

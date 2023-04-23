@@ -23,7 +23,8 @@ RUN ./patch_musl.sh
 
 # # Compile
 RUN mkdir -p dist
-RUN mkdir build && cd build && cmake .. -DWITH_TESTS=0 -DWITH_MUSL=1 && make -j$(nproc)
+RUN mkdir build && cd build && cmake .. -DWITH_TESTS=0 -DWITH_MUSL=1
+RUN cd build && make -j$(nproc)
 
 # Create static binary
 # RUN pip3 install wheel scons
