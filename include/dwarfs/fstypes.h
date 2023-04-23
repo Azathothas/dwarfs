@@ -27,7 +27,11 @@
 #include <memory>
 #include <string>
 
+#ifdef MUSL
+#include <sys/uio.h>
+#else
 #include <bits/types/struct_iovec.h>
+#endif
 
 #include <folly/small_vector.h>
 

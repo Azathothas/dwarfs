@@ -1,0 +1,34 @@
+FROM alpine:latest
+
+# Install deps
+RUN apk update && apk upgrade
+
+RUN apk add --no-cache git linux-headers libbsd-dev g++ clang cmake make bison \
+  flex ronn fuse pkgconf binutils-dev libarchive-dev boost-dev boost-context \
+  boost-filesystem boost-program_options boost-python3 boost-regex boost-system \
+  boost-thread libevent-dev elfutils-dev lz4-dev xz-dev openssl-dev libunwind-dev \
+  fmt-dev fuse-dev glog-dev double-conversion-dev zstd zstd-dev libdwarf \
+  libdwarf-dev fmt fmt-dev snappy snappy-dev libaio \
+  libaio-dev libsodium libsodium-dev bash xz patchelf
+
+# Clone
+# RUN mkdir -p dwarfs
+# COPY . dwarfs
+# WORKDIR dwarfs
+RUN git clone  --recurse-submodules https://github.com/ruanformigoni/dwarfs.git
+WORKDIR dwarfs
+
+# Patch folly to compile with musl
+RUN ./docker/patch_musl.sh
+
+# Compile
+RUN mkdir build
+WORKDIR build
+RUN cmake .. -DWITH_TESTS=0 -DWITH_MUSL=1
+RUN make -j$(nproc)
+
+# Package
+RUN ../docker/patch_libs.sh "$(pwd)/dwarfs2" "$(pwd)/mkdwarfs" "$(pwd)/dwarfsextract"
+RUN tar -cf dist.tar dist
+RUN xz -z3 dist.tar
+RUN mv dist.tar.xz ..
