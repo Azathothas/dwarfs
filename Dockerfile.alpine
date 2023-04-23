@@ -19,14 +19,11 @@ RUN git clone  --recurse-submodules https://github.com/ruanformigoni/dwarfs.git
 WORKDIR dwarfs
 
 # Patch folly to compile with musl
-RUN ./patch_musl.sh
+RUN ./docker/patch_musl.sh
 
-# # Compile
-RUN mkdir -p dist
+# Compile
 RUN mkdir build && cd build && cmake .. -DWITH_TESTS=0 -DWITH_MUSL=1
 RUN cd build && make -j$(nproc)
 
-# Create static binary
-# RUN pip3 install wheel scons
-# RUN pip3 install staticx
-# RUN staticx src/proot dist/proot
+# Package
+RUN ./docker/patch_libs.sh "$(pwd)/dwarfs2" "$(pwd)/mkdwarfs" "$(pwd)/dwarfsextract"

@@ -36,11 +36,11 @@ for i; do
   patchelf --set-interpreter '../dwarfs-libs/ld-musl-x86_64.so.1' "bin/$(basename "$i")"
 done
 
-{ tee dwarfs.sh | sed 's/^/-- /'; } <<-EOF
+{ tee dwarfs.sh | sed 's/^/-- /'; } <<-'EOF'
 #!/bin/bash
 set -e
-HERE=\$( cd -- "\$( dirname -- "\${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-cd "\$HERE/bin"
-exec="\$(find . -iname "\$1" -print -quit)"
-LC_ALL="C" LD_LIBRARY_PATH="../dwarfs-libs" "\$exec"
+HERE=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "$HERE/bin"
+exec="$(find . -iname "$1" -print -quit)"
+LC_ALL="C" LD_LIBRARY_PATH="../dwarfs-libs" "$exec"
 EOF
