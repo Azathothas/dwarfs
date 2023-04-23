@@ -137,7 +137,7 @@ else()
     message(FATAL_ERROR "CMake step for fmtlib failed: ${result}")
   endif()
   execute_process(
-    COMMAND ${CMAKE_COMMAND} --build .
+    COMMAND ${CMAKE_COMMAND} --build . -j8
     RESULT_VARIABLE result
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fmtlib-download)
   if(result)
