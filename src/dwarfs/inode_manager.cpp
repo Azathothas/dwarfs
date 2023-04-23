@@ -79,7 +79,7 @@ namespace dwarfs {
   }                                                                            \
   static_assert(true, "")
 
-#ifdef DWARFS_MULTIVERSIONING
+#if defined(DWARFS_MULTIVERSIONING) && !defined(MUSL)
 __attribute__((target("popcnt"))) DWARFS_FIND_SIMILAR_INODE_IMPL;
 __attribute__((target("default")))
 #endif
