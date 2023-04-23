@@ -14,8 +14,8 @@ jobs:
     - name: Compile and extract the artifact from docker container
       run: |
         mkdir -p dist
-      docker build -t dwarfs:alpine -f docker/Dockerfile.alpine .
-      docker run --rm -v $(pwd):/workdir dwarfs:alpine cp /dwarfs/dist.tar.xz /workdir/dist/dist.tar.xz
+        docker build -t dwarfs:alpine -f docker/Dockerfile.alpine .
+        docker run --rm -v $(pwd):/workdir dwarfs:alpine cp /dwarfs/dist.tar.xz /workdir/dist/dist.tar.xz
 
     - name: Set permissions for dist directory
       run: |
