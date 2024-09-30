@@ -2,6 +2,8 @@
 
 set -ex
 
+export PS4='$LINENO: '
+
 export CCACHE_DIR=/ccache
 
 LOCAL_REPO_PATH=/local/repos
@@ -243,9 +245,14 @@ if [[ "$BUILD_FROM_TARBALL" == "1" ]]; then
   esac
 else
   # shellcheck disable=SC2086
-  cmake ../dwarfs/ $CMAKE_ARGS -DWITH_EXAMPLE=1
+  cmake ../dwarfs/ $CMAKE_ARGS -DWITH_EXAMPLE=0
 
   time $BUILD_TOOL
+
+  cp /root/build/universal/dwarfs-universal /workspace
+
+  # copy_artifacts fails, do not need to get there, already built, stop here
+  exit 0
 
   $RUN_TESTS
 

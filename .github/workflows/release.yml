@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: default
+on: [workflow_dispatch, push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+        fetch-depth: '0'
+        ref: ${{ github.ref }}
+
+    - name: Compile and extract artifacts from docker container
+      run: |
+        # This creates the dist folder
+        ./build.sh
+        mkdir -p dist
+        cp dwarfs-universal dist
+
+    - name: Set permissions for dist directory
+      run: |
+        sudo chown -R "$(id -u)":"$(id -g)" dist/
+        sudo chmod -R 766 dist/
+
+    - name: Upload artifacts to release
+      uses: actions/upload-artifact@v4
+      with:
+        name: dwarfs
+        path: 'dist'
+
+    - name: Compute Short SHA
+      id: ssha
+      run: |
+        echo "ssha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    outputs:
+      ssha: ${{ steps.ssha.outputs.ssha }}
+
+
+  release:
+      permissions: write-all
+      needs: [build]
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/download-artifact@v4
+          with:
+            name: dwarfs
+
+        - name: release
+          uses: marvinpinto/action-automatic-releases@latest
+          with:
+            title: Continuous ${{ needs.build.outputs.ssha }}
+            automatic_release_tag: ${{ needs.build.outputs.ssha }}
+            prerelease: false
+            draft: false
+            files: |
+              *dwarfs*
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
