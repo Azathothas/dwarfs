@@ -22,7 +22,7 @@ docker build . -t dwarfs -f ./Dockerfile.ubuntu \
 # Build dwarfs
 cd "$DIR_SCRIPT"
 mkdir -p dist
-docker run --rm -it --cap-add SYS_ADMIN --device /dev/fuse --privileged \
+docker run --rm --cap-add SYS_ADMIN --device /dev/fuse --privileged \
   -u 0:0 \
   --mount type=bind,source="$PWD",target=/workspace \
   --env BUILD_TYPE=gcc-release-ninja-static-notest \
