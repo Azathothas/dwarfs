@@ -251,6 +251,8 @@ else
 
   cp /root/build/universal/dwarfs-universal /workspace
 
+  strip -s /workspace/dwarfs-universal
+
   # copy_artifacts fails, do not need to get there, already built, stop here
   exit 0
 
