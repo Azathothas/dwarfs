@@ -10,6 +10,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+        fetch-depth: '0'
+        ref: ${{ github.ref }}
 
     - name: Compile and extract artifacts from docker container
       run: |
