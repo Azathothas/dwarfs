@@ -1,7 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: default
-on: [workflow_dispatch, push, pull_request]
+on: workflow_dispatch
 
 jobs:
   build:
@@ -27,6 +27,7 @@ jobs:
       run: |
         # This creates the dist folder
         export D_ARCH="arm64v8"
+        echo "D_ARCH=${D_ARCH}" >> "${GITHUB_ENV}"
         "./build.sh"
         mkdir -p dist
         cp dwarfs-universal dist
@@ -61,13 +62,15 @@ jobs:
           with:
             name: dwarfs
 
-        - name: release
-          uses: marvinpinto/action-automatic-releases@latest
+       #continuous
+        - name: Releaser
+          uses: softprops/action-gh-release@v2.0.8
           with:
-            title: Continuous ${{ needs.build.outputs.ssha }}
-            automatic_release_tag: ${{ needs.build.outputs.ssha }}
-            prerelease: false
+            name: "Continuous ${{ env.D_ARCH }}"
+            tag_name: "${{ env.D_ARCH }}"
+            prerelease: true
             draft: false
+            generate_release_notes: false
             files: |
               *dwarfs*
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          continue-on-error: true
