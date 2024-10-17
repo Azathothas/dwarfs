@@ -5,18 +5,22 @@
 # @file        : build
 # @created     : Monday Sep 30, 2024 09:13:29 -03
 #
-# @description : 
+# @description :
 ######################################################################
 
-set -e
+set -x
 
 DIR_SCRIPT="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #Set Docker Arch
-if [ "$(uname  -m)" == "aarch64" ]; then
- D_ARCH="arm64v8"
-elif [ "$(uname  -m)" == "x86_64" ]; then
- D_ARCH="amd64"
+if [ -n "${D_ARCH+x}" ] && [ -n "$D_ARCH" ]; then
+   if [ "$(uname  -m)" == "aarch64" ]; then
+    D_ARCH="arm64v8"
+   elif [ "$(uname  -m)" == "x86_64" ]; then
+    D_ARCH="amd64"
+   fi
+else
+  export D_ARCH="${D_ARCH}"
 fi
 
 # Create build environment
@@ -38,3 +42,5 @@ docker run --rm --cap-add SYS_ADMIN --device /dev/fuse --privileged \
   --env CC=/usr/bin/gcc-14 \
   --env CXX=/usr/bin/g++-14 \
   dwarfs
+
+set +x
