@@ -26,7 +26,7 @@ jobs:
     - name: Compile and extract artifacts from docker container
       run: |
         # This creates the dist folder
-        ./build.sh
+        D_ARCH="arm64v8" "./build.sh"
         mkdir -p dist
         cp dwarfs-universal dist
 
