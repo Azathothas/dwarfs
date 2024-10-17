@@ -13,7 +13,7 @@ set -x
 DIR_SCRIPT="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #Set Docker Arch
-if [ -n "${D_ARCH+x}" ] && [ -n "$D_ARCH" ]; then
+if [ -z "$D_ARCH" ]; then
    if [ "$(uname  -m)" == "aarch64" ]; then
     D_ARCH="arm64v8"
    elif [ "$(uname  -m)" == "x86_64" ]; then
