@@ -3,6 +3,9 @@
 name: default
 on: workflow_dispatch
 
+env:
+  D_ARCH: "amd64"
+  #D_ARCH: "arm64v8"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,8 +29,7 @@ jobs:
     - name: Compile and extract artifacts from docker container
       run: |
         # This creates the dist folder
-        export D_ARCH="arm64v8"
-        echo "D_ARCH=${D_ARCH}" >> "${GITHUB_ENV}"
+        echo -e "\n[+] Setting Arch: ${D_ARCH}\n"
         "./build.sh"
         mkdir -p dist
         cp dwarfs-universal dist
