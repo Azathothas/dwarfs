@@ -4,8 +4,8 @@ name: default
 on: workflow_dispatch
 
 env:
-  D_ARCH: "amd64"
-  #D_ARCH: "arm64v8"
+  #D_ARCH: "amd64"
+  D_ARCH: "arm64v8"
 jobs:
   build:
     runs-on: ubuntu-latest
