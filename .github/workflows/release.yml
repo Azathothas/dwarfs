@@ -8,7 +8,8 @@ env:
   D_ARCH: "arm64v8"
 jobs:
   build:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: aarch64-linux-healthchecker
         
     steps:
     - name: Checkout code
